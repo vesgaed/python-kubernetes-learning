@@ -1,0 +1,26 @@
+# manifests/webapp-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 2 # ¡Empezaremos con 2 réplicas para ver el balanceo de carga!
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: mi-webapp-python:v1 # El nombre de la imagen que construimos localmente
+        imagePullPolicy: Never # IMPORTANTE: Le dice a K8s que no intente descargar la imagen de internet
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REDIS_HOST
+          value: "redis-service" # Conectamos nuestra app al Service de Redis

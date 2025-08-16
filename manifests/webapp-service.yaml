@@ -1,0 +1,14 @@
+# manifests/webapp-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort # Expone el servicio en un puerto estático en tu máquina (el nodo)
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 80 # Puerto interno del Service
+      targetPort: 5000 # Puerto del contenedor (donde corre Flask)
+      nodePort: 30007 # Puerto para acceder desde el exterior (localhost:30007)
